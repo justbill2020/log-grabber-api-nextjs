@@ -1,0 +1,25 @@
+{
+  "name": "logo-grabber-api-nextjs",
+  "version": "0.1.0",
+  "description": "This is an API to scrap a website home page and pull the URL path for the logo.",
+  "main": "app.js",
+  "scripts": {
+    "test": "app.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justbill2020/logo-grabber-api-nextjs.git"
+  },
+  "keywords": [
+    "api",
+    "next.js",
+    "express",
+    "web-scraper"
+  ],
+  "author": "justbill2020, alexmason",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/justbill2020/logo-grabber-api-nextjs/issues"
+  },
+  "homepage": "https://github.com/justbill2020/logo-grabber-api-nextjs#readme"
+}
