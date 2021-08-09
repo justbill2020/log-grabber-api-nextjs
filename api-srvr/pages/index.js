@@ -41,7 +41,10 @@ export default function Home() {
           <button>Submit</button>
         </form>
         {urlResult.logoUrl ? (
-          <picture><img src={urlResult.logoUrl}/></picture>
+          <div>
+            <picture><img referrerPolicy="same-origin-when-cross-origin" src={urlResult.logoUrl}></img></picture>
+            <iframe referrerPolicy="same-origin-when-cross-origin" src={urlResult.logoUrl}></iframe>
+          </div>
         ) : (
           <p>{urlResult.error}</p>
         )}
