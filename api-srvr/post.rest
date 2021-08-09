@@ -5,7 +5,7 @@ Content-Type: application/json
   "url":"https://buffalowildwings.com/"
 }
 
-POST https://logo-grabber-api-nextjs.vercel.app/api/url
+POST https://logo-grabber-api-nextjs-mhe1q5czi-darkmedia.vercel.app/api/url
 Content-Type: application/json
 
 {

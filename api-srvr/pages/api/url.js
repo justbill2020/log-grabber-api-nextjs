@@ -1,4 +1,5 @@
-const {chromium} = require('playwright') // 1
+const chromium = require('chrome-aws-lambda')
+const playwright = require('playwright-core') // 1
 const Cors = require('cors')
 
 const cors = Cors({
@@ -23,9 +24,16 @@ export default async (req, res) => { // 2
       const url = req.body.url
 
       try {
-        const browser = await chromium.launch()
+        await chromium.font("https://raw.githack.com/googlei18n/noto-emoji/master/fonts/NotoColorEmoji.ttf")
+        const browser = await playwright.chromium.launch({
+          args: chromium.args,
+          executablePath: await chromium.executablePath || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+          headless: chromium.headless,
+        });
         const context = await browser.newContext()
-        const page = await context.newPage({acceptDownloads:true, userAgent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) chromium/92.0.4515.107 Safari/537.36"})
+        const page = await context.newPage({
+          acceptDownloads:true, 
+          userAgent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) chromium/92.0.4515.107 Safari/537.36"})
         await page.goto(url)
         const element = await page.$$('img')
         const shouldFilter = await Promise.all(element.map(async (imgElm) => {
