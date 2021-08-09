@@ -1,15 +1,16 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+// import styles from '../styles/Home.module.css'
 import React from 'react'
+
 
 export default function Home() {
   const [inputValue, setInputValue] = React.useState('')
-  const [url, setUrl] = React.useState({})
+  const [urlResult, setUrl] = React.useState({})
 
   const handleSubmit = (e) => {
     e.preventDefault()
     fetch('/api/url', {
-      method: 'get',
+      method: 'post',
       headers: {
         'content-type': 'application/json',
       },
@@ -21,17 +22,17 @@ export default function Home() {
       })
   }
   return (
-    <div className={styles.container}>
+    <div >
       <Head>
         <title>Fetch URL Logo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
+      <main >
         <h1>Fetch A Logo from URL</h1>
         <form onSubmit={handleSubmit}>
           <label>
-            Enter a Twitter username
+            Enter a website URL
             <input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -39,10 +40,10 @@ export default function Home() {
           </label>
           <button>Submit</button>
         </form>
-        {userFollowers.followerCount >= 0 ? (
-          <p>Followers: {userFollowers.followerCount}</p>
+        {urlResult.logoUrl ? (
+          <picture><img src={urlResult.logoUrl}/></picture>
         ) : (
-          <p>{userFollowers.error}</p>
+          <p>{urlResult.error}</p>
         )}
       </main>
     </div>

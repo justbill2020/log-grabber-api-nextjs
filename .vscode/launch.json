@@ -1,0 +1,27 @@
+{
+  "configurations": [
+  {
+    "name": "Launch via NPM",
+    "request": "launch",
+    "runtimeArgs": [
+      "run",
+      "dev"
+    ],
+    "cwd":"${workspaceFolder}//api-srvr",
+    "runtimeExecutable": "npm",
+    "env": {
+      "PWDEBUG":"console"
+    },
+    "skipFiles": [
+      "<node_internals>/**"
+    ],
+    "type": "pwa-node"
+  },
+    {
+      "type": "pwa-chrome",
+      "name": "http://localhost:3000",
+      "request": "launch",
+      "url": "http://localhost:3000"
+    }
+  ]
+}
