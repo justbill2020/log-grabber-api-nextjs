@@ -37,7 +37,9 @@ export default async (req, res) => { // 2
       if (!executablePath) {
         const browserFetcher = chromium.puppeteer.createBrowserFetcher()
         const currVersions = await browserFetcher.localRevisions()
-        if (!currVersions.includes(revision)) const revInfo = await browserFetcher.download(revision)
+        if (!currVersions.includes(revision)) {
+          const revInfo = await browserFetcher.download(revision)
+        }
         executablePath = revInfo.executablePath
       }
       const browser = await chromium.puppeteer.launch({
