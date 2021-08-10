@@ -1,7 +1,7 @@
 const chromium = require('chrome-aws-lambda')
-const playwright = require('playwright-core') // 1
+// const playwright = require('playwright-core') // 1
 const Cors = require('cors')
-
+const revision = chromium.puppeteer._preferredRevision
 const cors = Cors({
   methods:['POST']
 })
@@ -12,7 +12,6 @@ function runMiddleware(req, res, fn) {
       if (result instanceof Error) {
         return reject(result)
       }
-
       return resolve(result)
     })
   })
@@ -23,17 +22,41 @@ export default async (req, res) => { // 2
     if (req.method === 'POST') { // 3
       const url = req.body.url
 
+      async function rej(e,res, newfn){
+        newfn()
+        res.statusCode = 404
+        return res.json({
+          url: url,
+          error: `${url} not found. Tip: Double check the spelling.`
+        })
+      }
+      
+      await chromium.font("https://raw.githack.com/googlei18n/noto-emoji/master/fonts/NotoColorEmoji.ttf")
+
+      let executablePath =  await chromium.executablePath 
+      if (!executablePath) {
+        const browserFetcher = chromium.puppeteer.createBrowserFetcher()
+        const currVersions = await browserFetcher.localRevisions()
+        if (!currVersions.includes(revision)) const revInfo = await browserFetcher.download(revision)
+        executablePath = revInfo.executablePath
+      }
+      const browser = await chromium.puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        ignoreHTTPSErrors: true,
+        executablePath,
+        headless: chromium.headless,
+      }).catch((e)=>{
+          re(e,res, async (browser)=>{
+            if (browser) await browser.close()
+          })
+      });
       try {
-        await chromium.font("https://raw.githack.com/googlei18n/noto-emoji/master/fonts/NotoColorEmoji.ttf")
-        const browser = await playwright.chromium.launch({
-          args: chromium.args,
-          executablePath: await chromium.executablePath || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-          headless: chromium.headless,
-        });
         const context = await browser.newContext()
         const page = await context.newPage({
           acceptDownloads:true, 
-          userAgent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) chromium/92.0.4515.107 Safari/537.36"})
+          userAgent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) chromium/92.0.4515.107 Safari/537.36"
+        })
         await page.goto(url)
         const element = await page.$$('img')
         const shouldFilter = await Promise.all(element.map(async (imgElm) => {
@@ -53,12 +76,7 @@ export default async (req, res) => { // 2
           logoUrl: logoUrlString,
         })
       } catch (e) { // 5
-        await browser.close()
-        res.statusCode = 404
-        return res.json({
-          url: url,
-          error: `${url} not found. Tip: Double check the spelling.`
-        })
+        rej.bind({browser,res},e)
       }
     }
 }
