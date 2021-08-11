@@ -2,8 +2,10 @@
   "name": "logo-grabber-api-nextjs",
   "version": "0.1.0",
   "description": "This is an API to scrap a website home page and pull the URL path for the logo.",
-  "main": "app.js",
+  "main": "api-srvr/pages/index.js",
   "scripts": {
+    "build": "cd api-srvr && npm build",
+    "start": "cd api-srvr && npm start",
     "test": "app.test.js"
   },
   "repository": {
