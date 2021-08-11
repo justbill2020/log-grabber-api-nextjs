@@ -6,6 +6,7 @@
   "scripts": {
     "build": "cd api-srvr && npm build",
     "start": "cd api-srvr && npm start",
+    "postinstall": "cd api-srvr && npm install",
     "test": "app.test.js"
   },
   "repository": {
